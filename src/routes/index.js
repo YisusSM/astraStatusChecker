@@ -32,8 +32,10 @@ router.post('/status/:name', (req, res) => {
   const name = req.params.name
   setServiceStatus(name, req.body)
 
-  const data = getService(name)
-  req.app.locals.io.emit('service:update', data)
+  const serviceInfo = getService(name)
+  req.app.locals.io.emit('service:update', {
+    service: serviceInfo
+  })
 
   res.sendStatus(201)
 })

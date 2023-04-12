@@ -37,7 +37,24 @@ const serviceMetaSchema = {
 
 const mp = new Map()
 data.forEach(e => {
-  mp.set(e.name, {...e})
+  mp.set(e.name, e)
+})
+
+// Mapa de padre -> array de hijos
+const children = new Map()
+data.forEach(e => {
+  const parents = e.parents
+
+  for (let p of parents) {
+    const value = children.get(p)
+    if (!value) {
+      children.set(p, [e.name])
+      continue
+    }
+
+    value.push(e.name)
+    children.set(p, value)
+  }
 })
 
 export function getAllServices () {
@@ -60,9 +77,86 @@ export function setServiceStatus (name, meta) {
     throw new Error('Invalid schema')
   }
 
+  if (value.current_system_status === meta.system_status) {
+    console.warn('Servicio con el mismo status')
+    return
+  }
+
+  const mxStatus = getPredominantState(name)
+  if (mxStatus < PRIORITY[meta.system_status]) {
+    console.warn("Can't change service status until all of his parents have the same status")
+    return
+  }
+
   value.history.unshift(meta)
   value.current_system_status = meta.system_status
   mp.set(name, value)
+
+  dfs(name, meta)
+}
+
+/**
+ * Aplicamos un dfs a todos los servicios hijo del parent
+ * Si parent cambio a rojo, todos sus hijos cambiaran a rojo y los hijos de sus hijos
+ * @param {*} parent
+ * @param {*} status
+ */
+function dfs (parent, meta) {
+  const queue = children.get(parent).slice()
+  const visited = new Set()
+
+  while (queue.length > 0) {
+    const current = queue.shift()
+    const mxStatus = getPredominantState(current)
+    const curr = mp.get(current)
+
+    if (curr.current_system_status === meta.system_status || mxStatus < PRIORITY[meta.system_status]) {
+      continue
+    }
+
+    curr.current_system_status = meta.system_status
+    curr.history.unshift(meta)
+    visited.add(current)
+
+    const nextChildren = children.get(current)
+    if (!nextChildren) {
+      return
+    }
+    for (let c of nextChildren) {
+      if (visited.has(c)) {
+        continue
+      }
+
+      queue.push(c)
+    }
+  }
+}
+
+/**
+ * Retorna el estado del servicio dado sus dependencias
+ * Si alguna de sus dependencias esta en rojo, el estado del servicio sera rojo
+ * @param {*} serviceName
+ */
+function getPredominantState (serviceName) {
+  const service = mp.get(serviceName)
+  if (!service) {
+    throw new Error('Service not found')
+  }
+
+  const parents = service.parents
+  let ans = PRIORITY.green
+  for (let p of parents) {
+    const parent = mp.get(p)
+    const status = parent.current_system_status
+
+    if (status === 'red') {
+      return PRIORITY.red
+    }
+
+    ans = Math.min(ans, PRIORITY[status])
+  }
+
+  return ans
 }
 
 /**
@@ -142,7 +236,7 @@ export function getService (name) {
  * @returns
  */
 function mpToArray (mp) {
-  return Array.from(mp, ([name, value]) => ({...value}))
+  return Array.from(mp, ([name, value]) => (value))
 }
 
 /**
