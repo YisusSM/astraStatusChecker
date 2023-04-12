@@ -22,7 +22,7 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-  console.log('Un usuario se ha conectado')
+  console.log('A client has connected')
 })
 
 app.locals.io = io

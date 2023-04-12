@@ -29,12 +29,12 @@
 {"name":"Voltsillam","group":"HR","current_system_status":"green","history":[],"parents":[]},
 {"name":"Flowdesk","group":"OPERATION","current_system_status":"green","history":[],"parents":[]},
 {"name":"Veribet","group":"DEV","current_system_status":"green","history":[],"parents":[]},
-{"name":"Fix San","group":"DEV","current_system_status":"green","history":[],"parents":[]},
+{"name":"Fix San","group":"DEV","current_system_status":"green","history":[],"parents":["Span"]},
 {"name":"Bigtax","group":"HR","current_system_status":"green","history":[],"parents":[]},
 {"name":"Konklab","group":"DEV","current_system_status":"green","history":[],"parents":[]},
 {"name":"It","group":"IT","current_system_status":"green","history":[],"parents":[]},
 {"name":"Duobam","group":"IT","current_system_status":"green","history":[],"parents":[]},
 {"name":"Zathin","group":"RESEARCH","current_system_status":"green","history":[],"parents":[]},
 {"name":"Pannier","group":"FINANCE","current_system_status":"green","history":[],"parents":[]},
-{"name":"Span","group":"HR","current_system_status":"green","history":[],"parents":[]}
+{"name":"Span","group":"DEV","current_system_status":"green","history":[],"parents":[]}
 ]

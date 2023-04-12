@@ -49,16 +49,20 @@ data.forEach(e => {
     const value = children.get(p)
     if (!value) {
       children.set(p, [e.name])
-      continue
     }
 
-    value.push(e.name)
-    children.set(p, value)
+    else {
+      value.push(e.name)
+      children.set(p, value)
+    }
   }
 })
 
+console.log(children)
+
 export function getAllServices () {
-  return mpToArray(mp).sort(serviceSort)
+  const res = mpToArray(mp).sort(groupSort)
+  return res.sort(serviceSort)
 }
 
 /**
@@ -102,6 +106,10 @@ export function setServiceStatus (name, meta) {
  * @param {*} status
  */
 function dfs (parent, meta) {
+  if (!children.has(parent)) {
+    return
+  }
+
   const queue = children.get(parent).slice()
   const visited = new Set()
   visited.add(parent)
@@ -121,7 +129,7 @@ function dfs (parent, meta) {
 
     const nextChildren = children.get(current)
     if (!nextChildren) {
-      return
+      continue
     }
     for (let c of nextChildren) {
       if (visited.has(c)) {
@@ -177,11 +185,14 @@ export function getServicesBySystemStatus (status, group) {
  * Retorna los servicios dado un grupo, ordenados por status
  */
 export function getServicesByGroup (group) {
-  const res = mpToArray(mp)
+  let res = mpToArray(mp)
 
-  return res.filter((e) => {
+  res = res.filter((e) => {
     return e.group === group
-  }).sort(serviceSort)
+  })
+
+  res.sort(nameSort)
+  return res.sort(serviceSort)
 }
 
 /**
@@ -255,4 +266,12 @@ function serviceSort (a, b) {
   const statusB = b.current_system_status
 
   return PRIORITY[statusA] - PRIORITY[statusB]
+}
+
+function groupSort (a, b) {
+  return ('' + a.group).localeCompare(b.group)
+}
+
+function nameSort (a, b) {
+    return ('' + a.name).localeCompare(b.name)
 }
