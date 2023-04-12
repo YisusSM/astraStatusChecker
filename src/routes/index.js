@@ -4,6 +4,7 @@ import { setServiceStatus, getGroupsInsights, getAllServices, getServicesBySyste
 const router = new Router()
 
 router.get('/', (req, res) => {
+  console.log('Getting all services')
   const data = getAllServices()
   res.status(200).send(data)
 })
