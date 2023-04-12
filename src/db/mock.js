@@ -104,6 +104,7 @@ export function setServiceStatus (name, meta) {
 function dfs (parent, meta) {
   const queue = children.get(parent).slice()
   const visited = new Set()
+  visited.add(parent)
 
   while (queue.length > 0) {
     const current = queue.shift()
