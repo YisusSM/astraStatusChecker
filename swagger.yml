@@ -1,0 +1,194 @@
+openapi: 3.0.3
+info:
+  title: AstraNow Status Checker
+  description:
+    AstraNow es un api REST que expone utilidades para el monitoreo servicios/recursos en
+    tiempo real
+  contact:
+    email: dsegovialey@gmail.com
+  version: 0.1.0
+tags:
+  - name: services
+    description: Gestión de servicios
+paths:
+  /services/status/{serviceId}:
+    post:
+      tags:
+        - services
+      summary: Cambia el estado de un servicio
+      description: Cambia el estado de un servicio dado su nombre/id
+      operationId: Set status
+      requestBody:
+        description: Cambia el estado de un servicio
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Service'
+        required: true
+      responses:
+        '200':
+          description: Operación exitosa
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /services/:
+    get:
+      tags:
+        - services
+      summary: Lista todos los servicios
+      description: Lista todos los servicios
+      operationId: get All Services
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfServiceData'
+
+  /services/groupInsights:
+    get:
+      tags:
+        - services
+      summary: Lista el numero de servicios afectados por grupo
+      description: Lista el numero de servicios afectados por grupo
+      operationId: get group insights
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupInsights'
+
+  /services/name/{serviceId}:
+    get:
+      tags:
+        - services
+      summary: Lista la información de un servicio dado su nombre
+      description: Lista la información de un servicio dado su nombre
+      operationId: get service by name
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceData'
+
+  /services/status/{status}/group/{group?}:
+    get:
+      tags:
+        - services
+      summary: Lista servicios dados un estado y un grupo opcional
+      description: Lista servicios dados un estado y un grupo opcional
+      operationId: get service by status and group
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfServiceData'
+
+  /services/group/{group}:
+    get:
+      tags:
+        - services
+      summary: Lista los servicios que corresponden al grupo dado
+      description: Lista los servicios que corresponden al grupo dado
+      operationId: get services by group
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfServiceData'
+
+components:
+  schemas:
+    Service:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        reason:
+          type: string
+        system_status:
+          type: string
+        status:
+          type: string
+        incident_number:
+          type: string
+
+    ServiceData:
+      type: object
+      properties:
+        name:
+          type: string
+        group:
+          type: string
+        current_system_status:
+          type: string
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+        parents:
+          type: array
+          items:
+            type: string
+
+    ArrayOfServiceData:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceData'
+
+    GroupInsights:
+      type: object
+      properties:
+        groupKey:
+          type: object
+          properties:
+            green:
+              type: number
+            yellow:
+              type: number
+            red:
+              type: number
+
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+
+  requestBodies:
+    Service:
+      description: Solicitud de cambio de estado de un servicio
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Service'
+
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
