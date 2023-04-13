@@ -92,6 +92,9 @@ export function setServiceStatus (name, meta) {
     return
   }
 
+  // xd
+  meta.date = new Date().toISOString()
+
   value.history.unshift(meta)
   value.current_system_status = meta.system_status
   mp.set(name, value)
