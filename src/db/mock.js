@@ -123,7 +123,7 @@ export function setServiceStatus (name, meta) {
 }
 
 function saveDateHistory (name, meta) {
-  const date = new Date(Date.parse(meta.date))
+  const date = new Date(meta.date)
   const key = date.toLocaleDateString()
   const value = dateHistory.get(key)
 
@@ -190,7 +190,11 @@ export function getDateHistory () {
 
     const value = dateHistory.get(k)
     value.forEach(e => {
-      obj.history.push(e)
+      obj.history.unshift(e)
+    })
+
+    obj.history.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date)
     })
 
     res.push(obj)
