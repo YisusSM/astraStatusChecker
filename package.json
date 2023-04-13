@@ -1,0 +1,33 @@
+{
+  "name": "real_time_status_checker",
+  "version": "1.0.0",
+  "description": "Servidor que verifica los servicios criticos de astrazeneca",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YisusSM/astraStatusChecker.git"
+  },
+  "author": "Tribeerus+1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YisusSM/astraStatusChecker/issues"
+  },
+  "homepage": "https://github.com/YisusSM/astraStatusChecker#readme",
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "firebase": "^9.19.1",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "standard": "^17.0.0"
+  }
+}
