@@ -3,14 +3,14 @@
   "group":"DEV",
   "current_system_status":"green",
   "history":[],
-    "parents":[]
+    "parents":["Internet Service", "Facilities Services"]
   },
 {"name":"Printing Service","group":"IT","current_system_status":"green","history":[],"parents":[]},
 {"name":"Computer Hardware Service","group":"DEV","current_system_status":"green","history":[],"parents":[]},
-{"name":"Computer Software Service","group":"DEV","current_system_status":"green","history":[],"parents":[]},
+{"name":"Computer Software Service","group":"DEV","current_system_status":"green","history":[],"parents":["Internet Service"]},
 {"name":"Internet Service","group":"IT","current_system_status":"green","history":[],"parents":[]},
 {"name":"Insurance Service","group":"FINANCE","current_system_status":"green","history":[],"parents":[]},
-{"name":"Sales Department Service","group":"FINANCE","current_system_status":"green","history":[],"parents":[]},
+{"name":"Sales Department Service","group":"FINANCE","current_system_status":"green","history":[],"parents":["Internet Service"]},
 {"name":"Business Supplies","group":"OPERATION","current_system_status":"green","history":[],"parents":[]},
 {"name":"Facilities Services","group":"OPERATION","current_system_status":"green","history":[],"parents":[]},
 {"name":"Human Resources","group":"HR","current_system_status":"green","history":[],"parents":[]},

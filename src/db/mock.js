@@ -125,7 +125,13 @@ export function setServiceStatus (name, meta) {
   mp.set(name, value)
 
   saveDateHistory(name, meta)
-  dfs(name, meta)
+  dfs(name, {
+    reason: `Dependency ${name} - ${meta.reason}`,
+    date: meta.date,
+    system_status: meta.system_status,
+    status: meta.status,
+    incident_number: meta.incident_number
+  })
 }
 
 function saveDateHistory (name, meta) {
@@ -300,7 +306,22 @@ export function getGroupsInsights () {
     res[e.group][e.current_system_status]++
   }
 
-  return res
+  return Object.keys(res).map((e) => {
+    return {
+      group: e,
+      insights: {
+        ...res[e]
+      }
+    }
+  }).sort((a, b) => {
+    const insightsA = a.insights
+    const insightsB = b.insights
+
+    const valA = (insightsA.yellow * -1) + (insightsA.red * -2)
+    const valB = (insightsB.yellow * -1) + (insightsB.red * -2)
+
+    return valA - valB
+  })
 }
 
 /**
