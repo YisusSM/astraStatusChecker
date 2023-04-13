@@ -58,7 +58,26 @@ data.forEach(e => {
   }
 })
 
-console.log(children)
+const dateHistory = new Map()
+data.forEach(e => {
+  if (!e.history || e.history.length === 0) {
+    return
+  }
+
+  e.history.forEach((h) => {
+    const key = h.date.toLocaleDateString()
+    const value = mp.get(key)
+
+    if (!value) {
+      mp.set(key, [h])
+    }
+
+    else {
+      value.push(h)
+      mp.set(key, value)
+    }
+  })
+})
 
 export function getAllServices () {
   const res = mpToArray(mp).sort(groupSort)
@@ -99,7 +118,23 @@ export function setServiceStatus (name, meta) {
   value.current_system_status = meta.system_status
   mp.set(name, value)
 
+  saveDateHistory(name, meta)
   dfs(name, meta)
+}
+
+function saveDateHistory (name, meta) {
+  const date = new Date(Date.parse(meta.date))
+  const key = date.toLocaleDateString()
+  const value = dateHistory.get(key)
+
+  if (!value) {
+    dateHistory.set(key, [meta])
+  }
+
+  else {
+    value.push(meta)
+    dateHistory.set(key, value)
+  }
 }
 
 /**
@@ -129,6 +164,7 @@ function dfs (parent, meta) {
     curr.current_system_status = meta.system_status
     curr.history.unshift(meta)
     visited.add(current)
+    saveDateHistory(parent, meta)
 
     const nextChildren = children.get(current)
     if (!nextChildren) {
@@ -142,6 +178,25 @@ function dfs (parent, meta) {
       queue.push(c)
     }
   }
+}
+
+export function getDateHistory () {
+  const res = []
+  for (let k of dateHistory.keys()) {
+    const obj = {
+      date: k,
+      history: []
+    }
+
+    const value = dateHistory.get(k)
+    value.forEach(e => {
+      obj.history.push(e)
+    })
+
+    res.push(obj)
+  }
+
+  return res
 }
 
 /**

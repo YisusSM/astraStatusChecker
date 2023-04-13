@@ -1,5 +1,13 @@
 import { Router } from 'express'
-import { setServiceStatus, getGroupsInsights, getAllServices, getServicesBySystemStatus, getServicesByGroup, getService } from '../db/mock.js'
+import {
+  setServiceStatus,
+  getGroupsInsights,
+  getAllServices,
+  getServicesBySystemStatus,
+  getServicesByGroup,
+  getService,
+  getDateHistory
+} from '../db/mock.js'
 
 const router = new Router()
 
@@ -29,6 +37,11 @@ router.get('/groupInsights', (req, res) => {
   res.status(200).send(data)
 })
 
+router.get('/dateHistory', (req, res) => {
+  const data = getDateHistory()
+  res.status(200).send(data)
+})
+
 router.post('/status/:name', (req, res) => {
   const name = req.params.name
   setServiceStatus(name, req.body)
@@ -40,4 +53,5 @@ router.post('/status/:name', (req, res) => {
 
   res.sendStatus(201)
 })
+
 export default router

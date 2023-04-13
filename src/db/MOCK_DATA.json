@@ -3,11 +3,8 @@
   "group":"DEV",
   "current_system_status":"green",
   "history":[],
-  "parents":[
-    "Span",
-    "Stim"
-  ]
-},
+    "parents":[]
+  },
 {"name":"Lotstring","group":"HR","current_system_status":"green","history":[],"parents":[]},
 {"name":"Gembucket","group":"HR","current_system_status":"green","history":[],"parents":[]},
 {"name":"Stim","group":"OPERATION","current_system_status":"green","history":[],"parents":[]},
