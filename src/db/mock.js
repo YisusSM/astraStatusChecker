@@ -69,11 +69,17 @@ data.forEach(e => {
     const value = mp.get(key)
 
     if (!value) {
-      mp.set(key, [h])
+      mp.set(key, [{
+        service: e,
+        ...h
+      }])
     }
 
     else {
-      value.push(h)
+      value.push({
+        service: e,
+        ...h
+      })
       mp.set(key, value)
     }
   })
@@ -128,11 +134,17 @@ function saveDateHistory (name, meta) {
   const value = dateHistory.get(key)
 
   if (!value) {
-    dateHistory.set(key, [meta])
+    dateHistory.set(key, [{
+        service: name,
+        ...meta
+      }])
   }
 
   else {
-    value.push(meta)
+    value.push({
+      service: name,
+      ...meta
+    })
     dateHistory.set(key, value)
   }
 }

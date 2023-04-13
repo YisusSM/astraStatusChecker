@@ -37,7 +37,7 @@ router.get('/groupInsights', (req, res) => {
   res.status(200).send(data)
 })
 
-router.get('/dateHistory', (req, res) => {
+router.get('/incidentHistory', (req, res) => {
   const data = getDateHistory()
   res.status(200).send(data)
 })
